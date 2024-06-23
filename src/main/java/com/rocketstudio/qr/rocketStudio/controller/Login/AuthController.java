@@ -17,9 +17,9 @@ public class AuthController {
     public AuthController(UserService userService) {
         this.userService = userService;
     }
-
-    @PostMapping("/login")
+    
     @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
         User user = userService.authenticate(email, password);
         if (user != null) {
