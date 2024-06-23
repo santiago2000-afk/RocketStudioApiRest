@@ -35,6 +35,7 @@ public class UserController {
             List<User> users = userService.getAllUsers();
             List<UserDTO> userDTOs = users.stream()
                     .map(user -> new UserDTO(
+                            user.getId(),
                             user.getName(),
                             user.getLastname(),
                             user.getDui(),

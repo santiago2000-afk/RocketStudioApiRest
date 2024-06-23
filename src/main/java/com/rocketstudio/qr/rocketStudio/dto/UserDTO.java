@@ -1,5 +1,7 @@
 package com.rocketstudio.qr.rocketStudio.dto;
 
+import java.util.UUID;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UserDTO {
+    private UUID id;
     private String name;
     private String lastname;
     private String dui;
@@ -19,8 +22,9 @@ public class UserDTO {
     private String password;
     private Integer state;
 
-    public UserDTO(String name, String lastname, String dui, String houseId, String phone, Integer roleId,
+    public UserDTO(UUID id, String name, String lastname, String dui, String houseId, String phone, Integer roleId,
             String googleUser, String email, String password, Integer state) {
+        this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.dui = dui;
