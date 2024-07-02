@@ -1,10 +1,12 @@
 package com.rocketstudio.qr.rocketStudio.controller.Login;
 
+import com.rocketstudio.qr.rocketStudio.dto.LoginRequest;
+import com.rocketstudio.qr.rocketStudio.dto.LoginResponse;
 import com.rocketstudio.qr.rocketStudio.entity.User;
 import com.rocketstudio.qr.rocketStudio.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,18 +15,25 @@ public class AuthController {
 
     private final UserService userService;
 
-    @Autowired
     public AuthController(UserService userService) {
         this.userService = userService;
     }
-    
-    @CrossOrigin(origins = "http://localhost:3000")
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        return ResponseEntity.ok("Logout successful");
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
-        User user = userService.authenticate(email, password);
+    public ResponseEntity<LoginResponse> login(@Validated @RequestBody LoginRequest loginRequest) {
+        User user = userService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         if (user != null) {
-            return ResponseEntity.ok("Login successful");
+            String role = userService.getRoleByRoleId(user.getRole());
+            LoginResponse loginResponse = new LoginResponse("Login successful", role, user.getRole().getId());
+            return ResponseEntity.ok(loginResponse);
+        } else {
+            LoginResponse loginResponse = new LoginResponse("Invalid credentials", null, null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginResponse);
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
 }
